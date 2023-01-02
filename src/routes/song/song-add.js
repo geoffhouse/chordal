@@ -7,22 +7,23 @@ module.exports = async function (app, opts) {
                 type: "object",
                 properties: {
                     admin: { type: "string" },
+                    archived: { type: "boolean" },
                     author: { type: "string" },
-                    ccli_number: { type: "integer" },
+                    ccliNumber: { type: "integer" },
                     copyright: { type: "string" },
-                    created_at: { type: "string" },
                     hidden: { type: "boolean" },
-                    last_scheduled_at: { type: "string" },
                     notes: { type: "string" },
                     title: { type: "string" },
-                    updated_at: { type: "string" },
                 },
             },
         },
         handler: async (request, reply) => {
-            return false;
             const songsCollection = app.mongo.db.collection("songs");
-            const result = await songsCollection.insertOne(request.body);
+            const result = await songsCollection.insertOne({
+                ...request.body,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            });
             reply.code(201);
             return { id: result.insertedId };
         },
