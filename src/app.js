@@ -15,4 +15,8 @@ module.exports = async function (app, opts) {
         dir: path.join(__dirname, "routes"),
         options: { prefix: "/api/v1" },
     });
+
+    app.register(require("@fastify/http-proxy"), {
+        upstream: "http://localhost:3001",
+    });
 };
